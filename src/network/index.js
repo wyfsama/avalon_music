@@ -8,12 +8,12 @@ function request(config) {
     if (config.method === 'get') {
       config.params = {
         ...config.params,
-        t: +new Date()
+        timestamp: +new Date()
       }
-    } else if (config.method === 'push') {
+    } else if (config.method === 'post') {
       config.data = {
         ...config.data,
-        t: +new Date()
+        timestamp: +new Date()
       }
     }
     return config

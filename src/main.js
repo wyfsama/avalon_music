@@ -7,7 +7,7 @@ import aplayer from 'vue-aplayer'
 // import ElementUI from 'element-ui';
 import {
   Button, Select, Autocomplete, Icon, Menu, MenuItem, Carousel, CarouselItem, Pagination, Table, TableColumn, ButtonGroup, Tabs,
-  TabPane, Message, Tooltip, Switch
+  TabPane, Tooltip, Switch, Form, FormItem, Input, Message, Loading
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/style/common/index.scss'
@@ -31,9 +31,14 @@ Vue
   .use(ButtonGroup)
   .use(Tabs)
   .use(TabPane)
-  .use(Message)
   .use(Tooltip)
   .use(Switch)
+  .use(Form)
+  .use(FormItem)
+  .use(Input)
+  .use(Loading)
+
+Vue.prototype.$message = Message
 
 Vue.mixin({
   methods: {

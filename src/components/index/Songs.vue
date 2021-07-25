@@ -24,7 +24,12 @@
       </div>
     </div>
     <div class="song-list">
-      <el-table :data="tableData1" stripe style="width: 100%">
+      <el-table
+        :data="tableData1"
+        stripe
+        style="width: 100%"
+        v-loading="loading"
+      >
         <el-table-column type="index" :index="indexMethod"> </el-table-column>
         <el-table-column width="50">
           <template slot-scope="scope">
@@ -81,13 +86,20 @@ export default {
         total: 0,
         currentPage: 1,
       },
+      loading: '',
+      songsList0: null,
+      songsList7: null,
+      songsList96: null,
+      songsList8: null,
+      songsList16: null,
+      timer: null,
     }
   },
   computed: {
     ...mapState(['list']),
   },
   created() {
-    this.getData()
+    this.getData(this.type)
   },
   watch: {
     type(v) {
@@ -96,16 +108,54 @@ export default {
   },
   methods: {
     async getData(type) {
-      const {
-        data: { data },
-      } = await this.request({
-        url: '/top/song',
-        params: {
-          type,
-        },
-      })
-      this.songsList = data
-      this.tableData = this.songsList.map((i) => {
+      this.loading = true
+      if (!sessionStorage.getItem(`songsList${type}`)) {
+        const {
+          data: { data },
+        } = await this.request({
+          url: '/top/song',
+          params: {
+            type,
+          },
+        })
+        this[`songsList${type}`] = data
+        sessionStorage.setItem(
+          `songsList${type}`,
+          JSON.stringify(this[`songsList${type}`])
+        )
+        // console.log(JSON.stringify(this[`songsList${type}`]))
+        this.timer = Date.now()
+      } else {
+        console.log((Date.now() - this.timer) / 1000)
+        if (Date.now() - this.timer > 30 * 1000) {
+          sessionStorage.removeItem('songsList0')
+          sessionStorage.removeItem('songsList8')
+          sessionStorage.removeItem('songsList7')
+          sessionStorage.removeItem('songsList16')
+          sessionStorage.removeItem('songsList96')
+          // sessionStorage.removeItem(`songsList${type}`)
+          sessionStorage.setItem(
+            `songsList${type}`,
+            JSON.stringify(this[`songsList${type}`])
+          )
+          const {
+            data: { data },
+          } = await this.request({
+            url: '/top/song',
+            params: {
+              type,
+            },
+          })
+          this[`songsList${type}`] = data
+          this.timer = Date.now()
+        } else {
+          this[`songsList${type}`] = JSON.parse(
+            sessionStorage.getItem(`songsList${type}`)
+          )
+        }
+      }
+      this.loading = false
+      this.tableData = this[`songsList${type}`].map((i) => {
         return {
           id: i.id,
           blurPicUrl: i.album.blurPicUrl,

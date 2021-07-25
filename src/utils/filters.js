@@ -1,3 +1,4 @@
+import map from './map.json'
 export default {
   filters: {
     // 格式化时间戳 补0  00：00
@@ -31,6 +32,10 @@ export default {
       } else {
         return val
       }
+    },
+    // 匹配省
+    matchCity(id) {
+      return map[id]
     }
   }
 }

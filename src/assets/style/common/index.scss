@@ -31,3 +31,14 @@ li {
 .a-c {
   align-items: center;
 }
+
+.el-form-item__label {
+  color: #eee;
+}
+.el-form-item__content {
+  text-align: center;
+}
+
+.el-form-item__content .el-button:first-child {
+  margin-right: 60px;
+}
